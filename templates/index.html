@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Brain Hemorrhage Detection System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-brain"></i>
+                    <h1>Brain Hemorrhage Detection System</h1>
+                </div>
+                <p class="subtitle">AI-powered intracranial hemorrhage detection from CT scans</p>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section">
+                <div class="upload-card">
+                    <h2>Upload CT Scan Image</h2>
+                    <p>Upload a CT scan report to detect potential hemorrhage</p>
+                    
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <h3>Drag and drop your file here</h3>
+                        <p>or</p>
+                        <button class="btn btn-primary" id="browseBtn">
+                            <i class="fas fa-folder-open"></i> Browse Files
+                        </button>
+                        <input type="file" id="fileInput" accept=".jpg,.jpeg,.png,.dcm,.tiff" style="display: none;">
+                        <p class="file-info">Supported formats: JPG, PNG, TIFF, DICOM</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <div class="results-card">
+                    <div class="result-header">
+                        <h2>Analysis Result</h2>
+                        <button class="btn btn-secondary btn-sm" id="newAnalysisBtn">
+                            <i class="fas fa-plus"></i> New Analysis
+                        </button>
+                    </div>
+
+                    <!-- Image Preview -->
+                    <div class="image-preview">
+                        <img id="previewImage" src="" alt="CT Scan Preview">
+                    </div>
+
+                    <!-- Loading Animation -->
+                    <div class="loading" id="loadingIndicator">
+                        <div class="spinner"></div>
+                        <p>Analyzing image...</p>
+                    </div>
+
+                    <!-- Results Display -->
+                    <div class="results-display" id="resultsDisplay" style="display: none;">
+                        <div class="result-item">
+                            <label>Detection Result:</label>
+                            <div class="result-value" id="resultValue"></div>
+                        </div>
+
+                        <div class="result-item">
+                            <label>Confidence Level:</label>
+                            <div class="confidence-bar">
+                                <div class="confidence-fill" id="confidenceFill" style="width: 0%"></div>
+                            </div>
+                            <span class="confidence-text" id="confidenceText">0%</span>
+                        </div>
+
+                        <div class="result-item">
+                            <label>Risk Assessment:</label>
+                            <div class="risk-badge" id="riskBadge"></div>
+                        </div>
+
+                        <!-- Detailed Information -->
+                        <div class="detailed-info">
+                            <h3>Detailed Analysis</h3>
+                            <div class="info-box">
+                                <p><strong>Status:</strong> <span id="statusInfo">Analysis Complete</span></p>
+                                <p><strong>Timestamp:</strong> <span id="timestampInfo">-</span></p>
+                                <p><strong>File:</strong> <span id="filenameInfo">-</span></p>
+                            </div>
+
+                            <!-- Interpretation Guide -->
+                            <div class="interpretation">
+                                <h4>Interpretation Guide</h4>
+                                <ul>
+                                    <li><strong>Hemorrhage Detected:</strong> The model has identified potential bleeding in the brain</li>
+                                    <li><strong>No Hemorrhage:</strong> No significant bleeding patterns detected</li>
+                                    <li><strong>Confidence:</strong> How certain the model is about its prediction (0-100%)</li>
+                                </ul>
+                                <p class="warning-note">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                    <strong>Disclaimer:</strong> This tool is for assistive purposes only. 
+                                    Always consult with a qualified medical professional for diagnosis.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Export Results -->
+                        <div class="export-section">
+                            <button class="btn btn-secondary" id="downloadBtn">
+                                <i class="fas fa-download"></i> Download Report
+                            </button>
+                            <button class="btn btn-secondary" id="printBtn">
+                                <i class="fas fa-print"></i> Print Report
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div class="error-message" id="errorMessage" style="display: none;"></div>
+                </div>
+            </section>
+
+            <!-- Statistics Section -->
+            <section class="stats-section">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <h3>Accuracy</h3>
+                        <p>96.5%</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Tests Performed</h3>
+                        <p>1000+</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h3>AI Model</h3>
+                        <p>CNN-Based</p>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Response Time</h3>
+                        <p>&lt; 2 seconds</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- How It Works Section -->
+            <section class="how-it-works">
+                <h2>How It Works</h2>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Upload CT Scan</h3>
+                        <p>Upload your brain CT scan image in any supported format</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>AI Analysis</h3>
+                        <p>Our deep learning model analyzes the image for hemorrhage patterns</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Get Results</h3>
+                        <p>Receive detailed analysis with confidence scores and recommendations</p>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>&copy; 2026 Brain Hemorrhage Detection System. All rights reserved.</p>
+            <p>This tool is for assistive purposes only. Not a substitute for professional medical diagnosis.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

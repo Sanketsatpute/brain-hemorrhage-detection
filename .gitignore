@@ -1,0 +1,21 @@
+venv/
+.venv/
+
+__pycache__/
+*.pyc
+
+dataset/
+Patients_CT/
+
+*.ipynb
+
+.git/
+
+# Training/debug files
+training_history.json
+
+# Generated uploads
+static/uploads/
+
+# Old model
+model/hemorrhage_model.h5
