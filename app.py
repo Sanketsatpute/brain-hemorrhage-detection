@@ -44,43 +44,31 @@ model = None
 
 
 def load_model():
-    """Load the trained V2 model"""
-
     global model
 
-    model_path = MODEL_PATH
+    model_path = os.path.join(
+        os.path.dirname(__file__),
+        'model',
+        'hemorrhage_model_v2.h5'
+    )
 
-    if os.path.exists(model_path):
+    print(f"Loading model from: {model_path}")
 
-        try:
-
-            model = keras.models.load_model(
-                model_path
-            )
-
-            print(
-                f"Model loaded successfully from {model_path}"
-            )
-
-            return True
-
-        except Exception as e:
-
-            print(
-                f"Error loading model: {e}"
-            )
-
-            return False
-
-    else:
-
-        print(
-            f"Model file not found at {model_path}"
-        )
-
+    if not os.path.exists(model_path):
+        print(f"Model file not found: {model_path}")
         return False
 
+    try:
+        model = keras.models.load_model(model_path)
 
+        print("Model loaded successfully")
+        print(f"Model path: {model_path}")
+
+        return True
+
+    except Exception as e:
+        print(f"Error loading model: {e}")
+        return False
 def allowed_file(filename):
     """Check if file extension is allowed"""
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -349,12 +337,14 @@ def internal_error(error):
     }), 500
 
 
+# Load model when the application starts.
+# This is required when running through Gunicorn,
+# because Gunicorn imports this module instead of
+# executing it as "__main__".
+if load_model():
+    print("✓ Model loaded successfully")
+else:
+    print("✗ Failed to load model")
+
 if __name__ == '__main__':
-    # Load model on startup
-    if load_model():
-        print("✓ Model loaded successfully")
-    else:
-        print("✗ Failed to load model. Please run train_model.py first")
-    
-    # Start Flask app
     app.run(debug=True, host='0.0.0.0', port=5000)
